@@ -1,6 +1,7 @@
 package breakout;
 
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 
 public class Breakout {
@@ -12,13 +13,28 @@ public class Breakout {
     public Panel panel;
 
     public int score = 0;
+    public int highestScore = 0;
     public boolean isJustFinishRestarting = false;
 
     public Breakout() {        
         frame = new JFrame("Score 0");
         panel = new Panel(this);
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                int choose = JOptionPane.showConfirmDialog(null,
+                        "Your highest score is " + highestScore,
+                        "Exit", JOptionPane.YES_NO_OPTION,
+                        JOptionPane.INFORMATION_MESSAGE);
+                if (choose == JOptionPane.YES_OPTION) {
+                    e.getWindow().dispose();
+                    System.exit(0);
+                  
+                }
+            }
+        });
         frame.setResizable(false);
         panel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         frame.add(panel);
@@ -32,6 +48,7 @@ public class Breakout {
 
     public void score() {
         score++;
+        if (score > highestScore) highestScore = score;
         frame.setTitle("Score " + score);
     }
 
