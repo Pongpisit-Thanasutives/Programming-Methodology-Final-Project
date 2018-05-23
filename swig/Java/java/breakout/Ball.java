@@ -84,19 +84,11 @@ public class Ball extends Thread {
             }
         }
 
-        if(going_right) {
-            x++;
-        }
-        else {
-            x--;
-        }
+        if(going_right) x++;
+        else x--;
 
-        if(going_up) {
-            y--;
-        }
-        else {
-            y++;
-        }
+        if(going_up) y--;
+        else y++;
     }
 
     public void paint(Graphics2D g) {

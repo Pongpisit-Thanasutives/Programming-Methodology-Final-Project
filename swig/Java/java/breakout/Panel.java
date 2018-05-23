@@ -9,8 +9,11 @@ public class Panel extends JPanel {
     public Wall wall;
     public Ball ball;
     public Paddle paddle;
-    
-    JLabel restart_game = new JLabel();
+
+    public String chosenOption = "voice";
+    JButton optButton = new JButton("Switch mode");
+
+    JLabel restart_game = new JLabel("Break the bricks!");
 
     public Panel(Breakout breakout) {
         setFocusable(true);
@@ -18,11 +21,21 @@ public class Panel extends JPanel {
         wall = new Wall(breakout, 5, 8);
         ball = new Ball(breakout);
         paddle = new Paddle(breakout);
-        
-        restart_game.setVisible(false);
+
+        restart_game.setFont(new Font("Serif", Font.BOLD, 20));
         add(restart_game);
 
-        addKeyListener(new KeyListener() {
+        optButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (chosenOption.equals("voice")) chosenOption = "keyboard";
+                else chosenOption = "voice";
+            }
+        });
+        optButton.setFocusable(false);
+        add(optButton);
+
+        this.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {}
 
@@ -34,7 +47,7 @@ public class Panel extends JPanel {
                 else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
                     paddle.direction = 'r';
                 }
-                breakout.decreaseScore();
+                if (chosenOption.equals("voice")) breakout.decreaseScore();
             }
 
             @Override

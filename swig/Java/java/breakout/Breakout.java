@@ -34,6 +34,10 @@ public class Breakout {
                   
                 }
             }
+
+            public void windowOpened(WindowEvent e){
+                JOptionPane.showMessageDialog(null, "Use your voice to move the paddle");
+            }
         });
         frame.setResizable(false);
         panel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -64,25 +68,23 @@ public class Breakout {
     }
 
     public void restart() {
-        panel.restart_game.setVisible(true);
-        
-        panel.restart_game.setText("Restarted in ... 3");
+        panel.restart_game.setText("Restarted in 3");
         try {
             Thread.sleep(1000);
         }
         catch(InterruptedException ex) {}
-        panel.restart_game.setText("Restarted in ... 2");
+        panel.restart_game.setText("Restarted in 2");
         try {
             Thread.sleep(1000);
         }
         catch(InterruptedException ex) {}
-        panel.restart_game.setText("Restarted in ... 1");
+        panel.restart_game.setText("Restarted in 1");
         try {
             Thread.sleep(1000);
         }
         catch(InterruptedException ex) {}
         
-        panel.restart_game.setVisible(false);
+        panel.restart_game.setText("Break the bricks!");
 
         panel.ball.x = WIDTH / 2 - panel.ball.DIAMETER / 2;
         panel.ball.y = HEIGHT - 50 - panel.ball.DIAMETER;

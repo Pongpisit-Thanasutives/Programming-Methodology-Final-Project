@@ -47,40 +47,43 @@ public class Game {
       int numBytesRead;
 
       while (true) {
-        // Reads the audio data in the blocking mode. If you are on a very slow
-        // machine such that the hotword detector could not process the audio
-        // data in real time, this will cause problem...
-        numBytesRead = targetLine.read(targetData, 0, targetData.length);
+        // Use your voice to move the paddle
+        if (breakout.panel.chosenOption.equals("voice")) {
+          // Reads the audio data in the blocking mode. If you are on a very slow
+          // machine such that the hotword detector could not process the audio
+          // data in real time, this will cause problem...
+          numBytesRead = targetLine.read(targetData, 0, targetData.length);
 
-        if (numBytesRead == -1) {
-          System.out.print("Fails to read audio data.");
-          break;
-        }
-
-        // Converts bytes into int16 that Snowboy will read.
-        ByteBuffer.wrap(targetData).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(snowboyData);
-
-        // Detection.
-        prev_result = result;
-        result = detector.RunDetection(snowboyData, snowboyData.length);
-        
-        if (result == 0) {
-          if (breakout.isJustFinishRestarting) {
-            direction = 'l';
-            breakout.isJustFinishRestarting = false;
-
-          } else {
-            if (result != prev_result) {
-              if (direction == 'l') direction = 'r';
-              else if (direction == 'r') direction = 'l';
-            }
+          if (numBytesRead == -1) {
+            System.out.print("Fails to read audio data.");
+            break;
           }
-          breakout.panel.paddle.direction = direction;
 
-        } else if (result == -2) {
-          breakout.panel.paddle.direction = 's';
+          // Converts bytes into int16 that Snowboy will read.
+          ByteBuffer.wrap(targetData).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(snowboyData);
+
+          // Detection.
+          prev_result = result;
+          result = detector.RunDetection(snowboyData, snowboyData.length);
+          
+          if (result == 0) {
+            if (breakout.isJustFinishRestarting) {
+              direction = 'l';
+              breakout.isJustFinishRestarting = false;
+
+            } else {
+              if (result != prev_result) {
+                if (direction == 'l') direction = 'r';
+                else if (direction == 'r') direction = 'l';
+              }
+            }
+            breakout.panel.paddle.direction = direction;
+
+          } else if (result == -2) {
+            breakout.panel.paddle.direction = 's';
+          }
         }
-
+        Thread.sleep(1);
       }
     } catch (Exception e) {
       System.err.println(e);
